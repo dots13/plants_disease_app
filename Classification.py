@@ -28,6 +28,30 @@ if not f_checkpoint.exists():
 else:
     modelicka = load_model_h5(f_checkpoint)
     
+uploaded_file = st.file_uploader("Upload file", ["png", "jpg"], key='uploader')
+
+if uploaded_file:
+    show_file = st.empty()
+    show_file.image(uploaded_file)
+   
+if st.session_state.get("uploader", False):
+    st.session_state.disabled = False
+else:
+    st.session_state.disabled = True
+    
+classify_button = st.button("Classify", key='c_but', disabled=st.session_state.get("disabled", True))
+
+DEFAULT_IMAGE_SIZE = tuple((224, 224))
+if classify_button:
+    image = Image.open(uploaded_file)
+    image = image.resize(DEFAULT_IMAGE_SIZE)
+    img_array = tf.keras.preprocessing.image.img_to_array(image)
+    img_array = tf.expand_dims(img_array, 0)
+    res = modelicka.predict(img_array)
+    st.write(res)
+
+
+    
 hide_streamlit_style = """
             <style>
             #MainMenu {visibility: hidden;}
