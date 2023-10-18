@@ -63,9 +63,9 @@ save_dest.mkdir(exist_ok=True)
 output = f'models/{model_name}'
 
 def load_model_pth(path):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = CoffeeLeafClassifier()
-    model.load_state_dict(torch.load(path))
+    model.load_state_dict(torch.load(path), map_location=torch.device('cpu'))
     #model.eval()
     return model
     
@@ -74,8 +74,6 @@ def load_model_from_gd():
     with st.spinner("Downloading model... this may take awhile! \n Don't stop it!"):
         gdown.download(id='1XroFNNq4FD8zE3DXDfBPj8NbD7cqYaaf', output=output, quiet=False)
         
-# style.py
-#device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
 f_checkpoint = Path(f"models//{model_name}")
 if not f_checkpoint.exists():
@@ -107,7 +105,7 @@ if classify_button:
     image_tensor = image_tensor.unsqueeze(0)
 
     # Move to the same device as the model (if using CUDA)
-    image_tensor = image_tensor.to("cuda" if torch.cuda.is_available() else "cpu")
+    #image_tensor = image_tensor.to("cuda" if torch.cuda.is_available() else "cpu")
 
     # Pass the image through the model
     output = model(image_tensor)
