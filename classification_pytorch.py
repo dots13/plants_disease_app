@@ -63,7 +63,7 @@ save_dest.mkdir(exist_ok=True)
 output = f'models/{model_name}'
 
 def load_model_pth(path):
-    device = torch.device('cpu')
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = CoffeeLeafClassifier()
     model.load_state_dict(torch.load(path))
     #model.eval()
@@ -107,7 +107,7 @@ if classify_button:
     image_tensor = image_tensor.unsqueeze(0)
 
     # Move to the same device as the model (if using CUDA)
-    image_tensor = image_tensor.to('cpu')
+    image_tensor = image_tensor.to("cuda" if torch.cuda.is_available() else "cpu")
 
     # Pass the image through the model
     output = model(image_tensor)
