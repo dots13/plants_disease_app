@@ -63,7 +63,7 @@ save_dest.mkdir(exist_ok=True)
 output = f'models/{model_name}'
 
 def load_model_pth(path):
-    model = TheModelClass(*args, **kwargs)
+    model = CoffeeLeafClassifier()
     model.load_state_dict(torch.load(path))
     model.eval()
     #model.eval()
