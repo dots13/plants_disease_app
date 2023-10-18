@@ -32,3 +32,17 @@ if not f_checkpoint.exists():
     load_model_from_gd()
 else:
     modelicka = load_model_pth(f_checkpoint)
+    
+    
+uploaded_file = st.file_uploader("Upload file", ["png", "jpg"], key='uploader')
+
+if uploaded_file:
+    show_file = st.empty()
+    show_file.image(uploaded_file)
+   
+if st.session_state.get("uploader", False):
+    st.session_state.disabled = False
+else:
+    st.session_state.disabled = True
+    
+classify_button = st.button("Classify", key='c_but', disabled=st.session_state.get("disabled", True))
