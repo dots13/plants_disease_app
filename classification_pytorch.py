@@ -19,7 +19,9 @@ output = f'models/{model_name}'
 
 @st.cache_resource
 def load_model_pth(path):
-    return torch.load(path)
+    model = torch.load(path)
+    model.eval()
+    return model
     
 def load_model_from_gd():
     f_checkpoint = Path(f"models//{model_name}")
