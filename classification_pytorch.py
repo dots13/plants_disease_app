@@ -17,8 +17,6 @@ save_dest = Path('models')
 save_dest.mkdir(exist_ok=True)
 output = f'models/{model_name}'
 
-model_path = os.path.join('cnn_strategy1_weighted_loss', 'coffee_leaf_classifier.pth')
-
 @st.cache_resource
 def load_model_pth(path):
     return torch.load(path)
