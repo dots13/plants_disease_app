@@ -19,7 +19,7 @@ output = f'models/{model_name}'
 
 @st.cache_resource
 def load_model_pth(path):
-    model = torch.load(path)
+    model = torch.load(path, map_location=torch.device("cpu"))
     model.eval()
     return model
     
