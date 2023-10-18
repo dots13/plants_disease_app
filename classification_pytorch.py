@@ -116,4 +116,4 @@ if classify_button:
     _, predicted_class = torch.max(output, 1)
     st.write(predicted_class.item())
     predicted_class_name = class_names[predicted_class.item()]
-    st.write(predicted_class.item())
+    st.write(predicted_class_name)
