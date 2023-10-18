@@ -64,7 +64,7 @@ output = f'models/{model_name}'
 
 def load_model_pth(path):
     model = CoffeeLeafClassifier()
-    model.load_state_dict(torch.load(path))
+    model.load_state_dict(torch.load(path), map_location=torch.device('cpu'))
     model.eval()
     #model.eval()
     return model
