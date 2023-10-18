@@ -46,3 +46,22 @@ else:
     st.session_state.disabled = True
     
 classify_button = st.button("Classify", key='c_but', disabled=st.session_state.get("disabled", True))
+
+DEFAULT_IMAGE_SIZE = tuple((224, 224))
+if classify_button:
+    image = Image.open(uploaded_file)
+    # Apply the transformations to the image
+    image_tensor = transform(image)
+
+    # Add a batch dimension (since models expect a batch of images, not a single image)
+    image_tensor = image_tensor.unsqueeze(0)
+
+    # Move to the same device as the model (if using CUDA)
+    image_tensor = image_tensor.to(device)
+
+    # Pass the image through the model
+    output = model(image_tensor)
+
+    # Get the predicted class
+    _, predicted_class = torch.max(output, 1)
+    st.write(predicted_class)
