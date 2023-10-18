@@ -51,6 +51,8 @@ class CoffeeLeafClassifier(nn.Module):
         x = self.fc_layers(x)
         return x
 
+class_names = ['Cerscospora', 'Healthy', 'Miner', 'Phoma', 'Rust']
+
 transform = transforms.Compose([
     transforms.Resize((256, 256)),
     transforms.ToTensor(),
