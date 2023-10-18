@@ -17,10 +17,9 @@ save_dest = Path('models')
 save_dest.mkdir(exist_ok=True)
 output = f'models/{model_name}'
 
-@st.cache_resource
 def load_model_pth(path):
-    model = torch.load(path, map_location=torch.device("cpu"))
-    model.eval()
+    model = torch.load(path)
+    #model.eval()
     return model
     
 def load_model_from_gd():
@@ -28,6 +27,8 @@ def load_model_from_gd():
     with st.spinner("Downloading model... this may take awhile! \n Don't stop it!"):
         gdown.download(id='1XroFNNq4FD8zE3DXDfBPj8NbD7cqYaaf', output=output, quiet=False)
         
+# style.py
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
 f_checkpoint = Path(f"models//{model_name}")
 if not f_checkpoint.exists():
