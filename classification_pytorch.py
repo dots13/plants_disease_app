@@ -7,55 +7,13 @@ import streamlit as st
 from PIL import Image
 
 
-import torch.nn as nn
-
-class CoffeeLeafClassifier(nn.Module):
-    def __init__(self):
-        super(CoffeeLeafClassifier, self).__init__()
-        
-        # Convolutional layers
-        self.conv_layers = nn.Sequential(
-            nn.Conv2d(3, 32, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            
-            nn.Conv2d(32, 64, kernel_size=3),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            
-            nn.Conv2d(64, 128, kernel_size=3),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-        )
-        
-        # Fully connected layers
-        self.fc_layers = nn.Sequential(
-            nn.Linear(128 * 30 * 30, 512),
-            nn.ReLU(),
-            nn.Dropout(0.5),
-            
-            nn.Linear(512, 256),
-            nn.ReLU(),
-            nn.Dropout(0.5),
-            
-            nn.Linear(256, 128),
-            nn.ReLU(),
-            nn.Dropout(0.5),
-            
-            nn.Linear(128, 5) # 5 classes
-        )
-        
-    def forward(self, x):
-        x = self.conv_layers(x)
-        x = x.view(x.size(0), -1) # Flatten the output
-        x = self.fc_layers(x)
-        return x
-
 transform = transforms.Compose([
     transforms.Resize((256, 256)),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]) # Adjust mean and std if necessary
 ])
+
+class_names = ['Cerscospora', 'Healthy', 'Miner', 'Phoma', 'Rust']
 
 model_name = 'coffee_leaf_classifier.pth'
 save_dest = Path('models')
@@ -95,7 +53,7 @@ else:
     
 classify_button = st.button("Classify", key='c_but', disabled=st.session_state.get("disabled", True))
 
-DEFAULT_IMAGE_SIZE = tuple((224, 224))
+
 if classify_button:
     image = Image.open(uploaded_file)
     # Apply the transformations to the image
@@ -104,12 +62,11 @@ if classify_button:
     # Add a batch dimension (since models expect a batch of images, not a single image)
     image_tensor = image_tensor.unsqueeze(0)
 
-    # Move to the same device as the model (if using CUDA)
-    #image_tensor = image_tensor.to("cuda" if torch.cuda.is_available() else "cpu")
-
     # Pass the image through the model
     output = modelicka(image_tensor)
 
     # Get the predicted class
     _, predicted_class = torch.max(output, 1)
-    st.write(predicted_class)
+    st.write(predicted_class.item())
+    predicted_class_name = class_names[predicted_class.item()]
+    st.write(predicted_class_name)
