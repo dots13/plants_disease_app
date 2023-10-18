@@ -108,7 +108,7 @@ if classify_button:
     #image_tensor = image_tensor.to("cuda" if torch.cuda.is_available() else "cpu")
 
     # Pass the image through the model
-    output = model(image_tensor)
+    output = modelicka(image_tensor)
 
     # Get the predicted class
     _, predicted_class = torch.max(output, 1)
